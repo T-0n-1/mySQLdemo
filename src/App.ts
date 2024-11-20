@@ -1,10 +1,10 @@
 // 1) imports
 import express, { Express, Request, Response } from "express";
-import mysql from "mysql";
+import mysql, { Pool } from "mysql";
 import dotenv from "dotenv";
 import joi from "joi";
 import { Person } from "./Interfaces";
-
+    
 dotenv.config();
 
 // 2) app
@@ -26,22 +26,28 @@ app.use(express.urlencoded({ extended: true })); // nested jsons
  */
 class PersonRow implements Person {
   id: number;
-  fname: string;
-  lname: string;
+  firstName: string;
+  lastName: string;
   birth: Date;
   constructor(
     id: number = 0,
-    fname: string = "XXX",
-    lname: string = yyy,
+    firstName: string = "XXX",
+    lastName: string = yyy,
     birth: Date = new Date(),
   ) {
     this.id = id;
-    this.fname = fname;
-    this.lname = lname;
+    this.firstName = firstName;
+    this.lastName = lastName;
     this.birth = birth;
+  }
+
+  public toString(): string {
+    return `(${this.id} ${this.firstName} ${this.lastName} ${this.birth.toString()})`;
   }
 }
 
 // 5) db connection
+const connectionPool: Pool = mysql.createPool({
+
 // 6) rest api requests
 // 7) app listen
