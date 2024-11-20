@@ -8,7 +8,7 @@
     "start": "node ./dist/App.js",
     "dev": "concurrently \"nodemon\" \"browser-sync start --config bs-config.js\"",
     "predev": "tsc -w &",
-    "build": "ts-node ./database/initializeDatabase.ts"
+    "build": "ts-node ./src/database/initializeDatabase.ts"
   },
   "repository": {
     "type": "git",

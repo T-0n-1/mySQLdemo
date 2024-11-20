@@ -4,7 +4,7 @@ import mysql, { Pool } from "mysql";
 import dotenv from "dotenv";
 import joi from "joi";
 import { Person } from "./Interfaces";
-    
+
 dotenv.config();
 
 // 2) app
@@ -48,6 +48,12 @@ class PersonRow implements Person {
 
 // 5) db connection
 const connectionPool: Pool = mysql.createPool({
+  connectionLimit: 10,
+  host: process.env.DBSERVER,
+  database: process.env.DBNAME,
+  user: process.env.DBUSER,
+  password: process.env.DBPASSWORD,
+});
 
 // 6) rest api requests
 // 7) app listen
