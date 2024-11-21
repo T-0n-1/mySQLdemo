@@ -34,4 +34,27 @@ router.get("/getall", (req: Request, res: Response) => {
   }
 });
 
+router.get("/getonerow/:id", (req: Request, res: Response) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999),
+  }).unknown(false);
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    const queryStr: string = "SELECT * FROM ?? WHERE id = ?";
+    const query: string = mysql.format(queryStr, [
+      process.env.DBTABLE,
+      value.id,
+    ]);
+    connectionPool.query(query, (err: MysqlError, rows: PersonRow[]) => {
+      if (err) {
+        res.status(400).send(err.sqlMessage);
+        return;
+      }
+      res.json(rows);
+    });
+  }
+});
+
 export default router;

@@ -4,4 +4,8 @@ GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}
 
 ### Get all students from the server
 
-GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}
+GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/getall
+
+### Get a student by ID
+
+GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/getonerow/1 
