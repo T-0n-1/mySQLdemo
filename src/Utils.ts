@@ -14,22 +14,22 @@ import type { Person } from "./Interfaces";
 export class PersonRow implements Person {
   id: number;
   fname: string;
-  lastName: string;
+  lname: string;
   birth: Date;
   constructor(
     id: number = 0,
     fname: string = "XXX",
-    lastName: string = "yyy",
+    lname: string = "yyy",
     birth: Date = new Date(),
   ) {
     this.id = id;
     this.fname = fname;
-    this.lastName = lastName;
+    this.lname = lname;
     this.birth = birth;
   }
 
   public toString(): string {
-    return `(${this.id} ${this.fname} ${this.lastName} ${this.birth.toString()})`;
+    return `(${this.id} ${this.fname} ${this.lname} ${this.birth.toString()})`;
   }
 }
 

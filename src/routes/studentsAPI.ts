@@ -25,7 +25,7 @@ router.get("/getall", (req: Request, res: Response) => {
       rows.forEach((pr: PersonRow) => {
         prow.id = pr.id || -1;
         prow.fname = pr.fname || "noFname";
-        prow.lastName = pr.lastName || "noLname";
+        prow.lname = pr.lname || "noLname";
         prow.birth = pr.birth || new Date();
         console.log(prow.toString());
       });
