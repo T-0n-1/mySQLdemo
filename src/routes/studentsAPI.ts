@@ -16,12 +16,12 @@ router.get("/getall", (req: Request, res: Response) => {
   } else {
     const queryStr: string = "SELECT * FROM ??";
     const query: string = mysql.format(queryStr, [process.env.DBTABLE]);
+    const prow: PersonRow = new PersonRow();
     connectionPool.query(query, (err: MysqlError, rows: PersonRow[]) => {
       if (err) {
         res.status(400).send(err.sqlMessage);
         return;
       }
-      const prow: PersonRow = new PersonRow();
       rows.forEach((pr: PersonRow) => {
         prow.id = pr.id || -1;
         prow.fname = pr.fname || "noFname";
@@ -47,12 +47,22 @@ router.get("/getonerow/:id", (req: Request, res: Response) => {
       process.env.DBTABLE,
       value.id,
     ]);
+    const prow: PersonRow = new PersonRow();
     connectionPool.query(query, (err: MysqlError, rows: PersonRow[]) => {
       if (err) {
         res.status(400).send(err.sqlMessage);
         return;
       }
-      res.json(rows);
+      if (rows.length > 0) {
+        prow.birth = rows[0].birth || new Date();
+        prow.fname = rows[0].fname || "noFname";
+        prow.lname = rows[0].lname || "noLname";
+        prow.id = rows[0].id || -1;
+        console.log(prow.toString());
+        res.json(prow);
+        return;
+      }
+      res.status(404).send("No rows found");
     });
   }
 });
