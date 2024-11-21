@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true })); // nested jsons
 app.use("/api", studentsRouter);
 
 app.get("/", (req: Request, res: Response) => {
-  const querySchema = joi.object().unknown();
+  const querySchema = joi.object().unknown(false);
   const { error } = querySchema.validate(req.query);
   if (error) {
     res.status(400).send(error.details[0].message);

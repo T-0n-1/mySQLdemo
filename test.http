@@ -1,0 +1,7 @@
+### Get basic information about the server
+
+GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}
+
+### Get all students from the server
+
+GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}
