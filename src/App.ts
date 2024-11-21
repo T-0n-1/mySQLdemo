@@ -1,59 +1,29 @@
-// 1) imports
 import express, { Express, Request, Response } from "express";
-import mysql, { Pool } from "mysql";
 import dotenv from "dotenv";
 import joi from "joi";
-import { Person } from "./Interfaces";
+import studentsRouter from "./routes/studentsAPI";
 
 dotenv.config();
 
-// 2) app
 const app: Express = express();
+const port: number = Number(process.env.SERVERPORT) || 4444;
 
-// 3) app config for json
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // nested jsons
+app.use("/api", studentsRouter);
 
-// 4) a class representing the table row
-/** mySQL table to be used
- * CREATE TABLE `Person` (
-  `id` int(11) NOT NULL,
-  `fname` varchar(30) DEFAULT NULL,
-  `lname` varchar(100) DEFAULT NULL,
-  `birth` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
-  )
- */
-class PersonRow implements Person {
-  id: number;
-  firstName: string;
-  lastName: string;
-  birth: Date;
-  constructor(
-    id: number = 0,
-    firstName: string = "XXX",
-    lastName: string = yyy,
-    birth: Date = new Date(),
-  ) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.birth = birth;
+app.get("/", (req: Request, res: Response) => {
+  const querySchema = joi.object().unknown();
+  const { error } = querySchema.validate(req.query);
+  if (error) {
+    res.status(400).send(error.details[0].message);
+    return;
+  } else {
+    res.send("Hello - connected to mySQL server");
   }
-
-  public toString(): string {
-    return `(${this.id} ${this.firstName} ${this.lastName} ${this.birth.toString()})`;
-  }
-}
-
-// 5) db connection
-const connectionPool: Pool = mysql.createPool({
-  connectionLimit: 10,
-  host: process.env.DBSERVER,
-  database: process.env.DBNAME,
-  user: process.env.DBUSER,
-  password: process.env.DBPASSWORD,
 });
 
-// 6) rest api requests
-// 7) app listen
+// const server =
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
