@@ -9,3 +9,15 @@ GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/getall
 ### Get a student by ID
 
 GET http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/getonerow/1 
+
+### Add a new student with POST method
+
+POST http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/insert
+Content-Type: application/json
+
+{
+    "id": 321,
+    "fname": "Patrick",
+    "lname": "Jane",
+    "birth": "1979-06-04"
+}
