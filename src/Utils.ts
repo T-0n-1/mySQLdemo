@@ -1,5 +1,8 @@
-import mysql, { Pool } from "mysql";
+import { Pool, createPool } from "mysql2";
 import type { Person } from "./Interfaces";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 // a class representing the table row
 /** mySQL table to be used
@@ -33,7 +36,7 @@ export class PersonRow implements Person {
   }
 }
 
-export const connectionPool: Pool = mysql.createPool({
+export const connectionPool: Pool = createPool({
   connectionLimit: 10,
   host: process.env.DBSERVER,
   database: process.env.DBNAME,
