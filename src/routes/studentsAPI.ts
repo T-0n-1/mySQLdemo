@@ -1,7 +1,7 @@
 import express, { Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
-import mysql, { QueryError } from "mysql2";
+import mysql, { MysqlError } from "mysql";
 import { connectionPool, PersonRow } from "../Utils";
 
 const router: Router = express.Router();
@@ -17,9 +17,9 @@ router.get("/getall", (req: Request, res: Response) => {
     const queryStr: string = "SELECT * FROM ??";
     const query: string = mysql.format(queryStr, [process.env.DBTABLE]);
     const prow: PersonRow = new PersonRow();
-    connectionPool.query(query, (err: QueryError, rows: PersonRow[]) => {
+    connectionPool.query(query, (err: MysqlError, rows: PersonRow[]) => {
       if (err) {
-        res.status(400).send(err.message);
+        res.status(400).send(err.sqlMessage);
         return;
       }
       rows.forEach((pr: PersonRow) => {
@@ -48,9 +48,9 @@ router.get("/getonerow/:id", (req: Request, res: Response) => {
       value.id,
     ]);
     const prow: PersonRow = new PersonRow();
-    connectionPool.query(query, (err: QueryError, rows: PersonRow[]) => {
+    connectionPool.query(query, (err: MysqlError, rows: PersonRow[]) => {
       if (err) {
-        res.status(400).send(err.message);
+        res.status(400).send(err.sqlMessage);
         return;
       }
       if (rows.length > 0) {

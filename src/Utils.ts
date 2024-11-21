@@ -1,4 +1,4 @@
-import { Pool, createPool } from "mysql2";
+import { Pool, createPool } from "mysql";
 import type { Person } from "./Interfaces";
 import dotenv from "dotenv";
 
