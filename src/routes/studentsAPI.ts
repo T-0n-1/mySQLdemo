@@ -1,11 +1,13 @@
 import express, { Request, Response, Router } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
-import mysql, { MysqlError } from "mysql";
+import mysql, { MysqlError, OkPacket } from "mysql";
 import { connectionPool, PersonRow } from "../Utils";
 
 const router: Router = express.Router();
 dotenv.config();
+
+router.use(express.json());
 
 router.get("/getall", (req: Request, res: Response) => {
   const querySchema = Joi.object().unknown(false);
@@ -63,6 +65,46 @@ router.get("/getonerow/:id", (req: Request, res: Response) => {
         return;
       }
       res.status(404).send("No rows found");
+    });
+  }
+});
+
+router.post("/insert", (req: Request, res: Response) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999).required(),
+    fname: Joi.string().min(2).max(15).required(),
+    lname: Joi.string().min(2).max(20).required(),
+    birth: Joi.date().required(),
+  }).unknown(false);
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+    return;
+  } else {
+    const id: number = value.id;
+    const fname: string = value.fname;
+    const lname: string = value.lname;
+    const birth: Date = value.birth;
+    const queryStr: string =
+      "INSERT INTO ?? (??, ??, ??, ??) VALUES (?, ?, ?, ?)";
+    const query: string = mysql.format(queryStr, [
+      process.env.DBTABLE,
+      "id",
+      "fname",
+      "lname",
+      "birth",
+      id,
+      fname,
+      lname,
+      birth,
+    ]);
+    connectionPool.query(query, (err: MysqlError, okPacket: OkPacket) => {
+      if (err) {
+        res.status(400).send(err.sqlMessage);
+        return;
+      }
+      console.log(`Row inserted with id: ${okPacket.insertId}`);
+      res.json({ message: `Rows affected/changed : ${okPacket.affectedRows}` });
     });
   }
 });
