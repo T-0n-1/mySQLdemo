@@ -21,3 +21,13 @@ Content-Type: application/json
     "lname": "Jane",
     "birth": "1979-06-04"
 }
+
+### Update student with PUT method
+
+PUT http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/update
+Content-Type: application/json
+
+{
+    "id": 321,
+    "birth": "1979-06-05"
+}

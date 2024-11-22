@@ -21,7 +21,7 @@ function runSQLCommands() {
         console.error("An error occurred while connecting to the MySQL server:", err);
         return;
       }
-      console.log("Connected to the MySQL server.");
+      console.log("MySQL server ready.");
     });
 
     // Use the database
@@ -29,15 +29,15 @@ function runSQLCommands() {
 
     // Create the table if it doesn’t exist
     connection.query(`
-        DROP TABLE IF EXISTS Person;
+        DROP TABLE IF EXISTS ??;
 
-        CREATE TABLE Person (
+        CREATE TABLE ?? (
             id INT PRIMARY KEY, 
             fname VARCHAR(255) NOT NULL,
             lname VARCHAR(255) NOT NULL,
             birth DATE NOT NULL
         );
-        `);
+        `, [process.env.DBTABLE, process.env.DBTABLE]);
     console.log("Table Person ensured.");
 
     // Insert sample data

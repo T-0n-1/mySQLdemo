@@ -4,3 +4,4 @@ export interface Person {
   lname: string;
   birth: Date;
 }
+export type queryArray = (string | number | NodeJS.process)[];
