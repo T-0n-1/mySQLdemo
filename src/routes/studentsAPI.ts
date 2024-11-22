@@ -167,7 +167,7 @@ router.delete("/delete/:id", (req: Request, res: Response) => {
       return;
     }
     console.log(`Row deleted with id: ${value.id}`);
-    res.json({ message: `Rows affected: ${okPacket.affectedRows}` });
+    res.json({ message: `Rows deleted: ${okPacket.affectedRows}` });
   });
 });
 
