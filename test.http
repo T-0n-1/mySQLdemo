@@ -31,3 +31,7 @@ Content-Type: application/json
     "id": 321,
     "birth": "1979-06-05"
 }
+
+### Delete student with DELETE method
+
+DELETE http://{{$dotenv SERVERNAME}}:{{$dotenv SERVERPORT}}/api/delete/321

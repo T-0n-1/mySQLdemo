@@ -114,7 +114,7 @@ router.put("/update", (req: Request, res: Response) => {
   const schema = Joi.object({
     id: Joi.number().integer().min(1).max(9999).required(),
     fname: Joi.string().max(15).optional(),
-    lname: Joi.string().max(20).optional(),
+    lname: Joi.string().max(25).optional(),
     birth: Joi.date().optional(),
   }).unknown(false);
   const { error, value } = schema.validate(req.body);
@@ -123,7 +123,6 @@ router.put("/update", (req: Request, res: Response) => {
     return;
   }
   const { id, ...fieldsToUpdate } = value;
-  // Ensure there are fields to update other than `id`
   if (Object.keys(fieldsToUpdate).length === 0) {
     res.status(400).json({ error: "No fields to update provided." });
     return;
@@ -147,7 +146,28 @@ router.put("/update", (req: Request, res: Response) => {
       return;
     }
     console.log(`Row updated with id: ${id}`);
-    res.json({ message: `Rows affected/changed: ${okPacket.affectedRows}` });
+    res.json({ message: `Rows changed: ${okPacket.changedRows}` });
+  });
+});
+
+router.delete("/delete/:id", (req: Request, res: Response) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999),
+  }).unknown(false);
+  const { error, value } = schema.validate(req.params);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+    return;
+  }
+  const queryStr = "DELETE FROM ?? WHERE ?? = ?";
+  const query = mysql.format(queryStr, [process.env.DBTABLE, "id", value.id]);
+  connectionPool.query(query, (err: MysqlError, okPacket: OkPacket) => {
+    if (err) {
+      res.status(400).send(err.sqlMessage);
+      return;
+    }
+    console.log(`Row deleted with id: ${value.id}`);
+    res.json({ message: `Rows affected: ${okPacket.affectedRows}` });
   });
 });
 
