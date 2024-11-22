@@ -5,7 +5,7 @@
   "main": "./dist/App.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "node ./database/createDatabase.mjs",
+    "build": "node ./database/createTable.mjs",
     "start": "node ./dist/App.js",
     "dev": "nodemon ./src/App.ts",
     "predev": "tsc -w &"

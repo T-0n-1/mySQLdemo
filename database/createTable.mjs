@@ -7,10 +7,11 @@ dotenv.config();
 function runSQLCommands() {
   // Create a connection to the MySQL server
   const connection = createConnection({
-    host: process.env.DBSERVER, // Replace with your server's hostname or IP
-    user: process.env.DBUSER, // Replace with your MySQL username
-    password: process.env.DBPASSWORD, // Replace with your MySQL password
-    database: process.env.DBNAME, // Replace with your database name
+    host: process.env.DBSERVER, 
+    user: process.env.DBUSER, 
+    password: process.env.DBPASSWORD,
+    database: process.env.DBNAME, 
+    multipleStatements: true,
   });
 
   try {
@@ -23,27 +24,25 @@ function runSQLCommands() {
       console.log("Connected to the MySQL server.");
     });
 
-    // Example: Create the database if it doesn’t exist
-    connection.query(`CREATE DATABASE IF NOT EXISTS PersonsDB`);
-    console.log("Database PersonsDB ensured.");
-
     // Use the database
-    connection.query(`USE PersonsDB`);
+    connection.query(`USE ??`, [process.env.DBNAME]);
 
     // Create the table if it doesn’t exist
     connection.query(`
-            CREATE TABLE IF NOT EXISTS Person (
-                id INT PRIMARY KEY, 
-                fname VARCHAR(255) NOT NULL,
-                lname VARCHAR(255) NOT NULL,
-                birth DATE NOT NULL
-            )
+        DROP TABLE IF EXISTS Person;
+
+        CREATE TABLE Person (
+            id INT PRIMARY KEY, 
+            fname VARCHAR(255) NOT NULL,
+            lname VARCHAR(255) NOT NULL,
+            birth DATE NOT NULL
+        );
         `);
     console.log("Table Person ensured.");
 
     // Insert sample data
     const result = connection.query(`
-            INSERT INTO Person (fname, lname, birth)
+            INSERT INTO Person (id, fname, lname, birth)
             VALUES
                 (1, 'Alice', 'Johnson', '1980-05-15'),
                 (2, 'John', 'Doe', '1990-01-01'),
